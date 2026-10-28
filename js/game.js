@@ -912,6 +912,14 @@
     sabotage(s) { G.sab = s || null; return G.sab; },
     toScreen,
     drawn,
+    // where rainbow id's drawn tip is on the screen (its mesh, so a mirrored drawing would show)
+    rbTip(id) {
+      const m = rbMeshes.get(id), r = G.w.rainbows.find((q) => q.id === id);
+      if (!m || !r) return null;
+      m.updateMatrixWorld(true);
+      const p = new T.Vector3(r.span, 0, 0).applyMatrix4(m.matrixWorld);
+      return toScreen(p.x, p.y, p.z);
+    },
     world: () => G.w,
     G,
     calm() { document.body.classList.add('calm'); },
