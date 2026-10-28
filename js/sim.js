@@ -466,8 +466,8 @@
       stepRainbows(w);
       stepItems(w);
       stepBuddy(w);
-      camera(w);
     }
+    camera(w);
     stepCritters(w);
     if (w.phase === 'play') {
       const g = w.players.find((p) => p.mode === 'ground' && p.y >= w.goalY - 0.05);

@@ -1,0 +1,7 @@
+[
+ { "label": "muted", "js": "localStorage.setItem('claudeGames.muted', '1'); localStorage.setItem('claudeGames.lang', 'en'); location.reload(); 'reload'", "wait": 5000 },
+ { "label": "title", "js": "game.hold(true); game.calm(); game.step(1); JSON.stringify({ touch: document.body.classList.contains('touch'), scroll: document.getElementById('title').scrollHeight > innerHeight + 2 })", "wait": 300, "shot": "L-title" },
+ { "label": "1P play", "js": "(() => { game.start({ level: 'easy', go: true, players: 1 }); game.step(1); return JSON.stringify(window.layoutCheck()); })()", "wait": 300, "shot": "L-play" },
+ { "label": "2P play", "js": "(() => { game.start({ level: 'easy', go: true, players: 2 }); game.step(1); return JSON.stringify(window.layoutCheck()); })()", "wait": 300, "shot": "L-play2" },
+ { "label": "results", "js": "(() => { const w = game.world(); w.lives = 1; w.water = 5; game.step(3); return JSON.stringify({ screen: game.state().screen, scroll: document.getElementById('results').scrollHeight > innerHeight + 2 }); })()", "wait": 800, "shot": "L-results" }
+]
