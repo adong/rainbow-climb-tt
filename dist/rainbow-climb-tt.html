@@ -3665,7 +3665,7 @@
     scene2: null, overT: 0, newRows: [], frame: 0, islandFor: null, throwT: [0, 0], oopsT: [0, 0],
   };
   let renderer, scene, cam, back, water, sparkles, confetti, islandMesh = null, treat, ball, peace, budCloud, last = 0;
-  const people = {}, bubbles = [], rings = [], stars = [];
+  const people = {}, bubbles = [], rings = [], stars = [], winClouds = [];
   let portraits = {};
   const rbMeshes = new Map(), critMeshes = new Map(), critPool = {}, itemMeshes = new Map();
   const v3 = new T.Vector3();
@@ -3705,6 +3705,10 @@
       st.visible = false;
       scene.add(st);
       stars.push(st);
+      const wc = A.emoji('☁️', 1.5);
+      wc.visible = false;
+      scene.add(wc);
+      winClouds.push(wc);
     }
     treat = A.emoji('🍦', 0.45);
     treat.visible = false;
@@ -4326,6 +4330,7 @@
     bubbles.forEach((b) => (b.visible = false));
     rings.forEach((b) => (b.visible = false));
     stars.forEach((s) => (s.visible = false));
+    winClouds.forEach((c) => (c.visible = false));
     if (sc && sc.kind === 'win') return winPose(sc, k);
     w.players.forEach((p, i) => {
       const P = people[p.who];
@@ -4393,14 +4398,17 @@
     }
   }
   function winPose(sc, k) {
-    // the climbers in front of the island doing their signature moves
+    // the climbers on little clouds in front of the island, low on the screen (under the results), doing their signature moves
     const w = G.w, ids = sc.who;
-    const y = w.phase === 'won' ? w.goalY : w.camY + 3;
+    const y = w.camY + 0.8 + Math.sin(G.time * 2) * 0.08;
     ids.forEach((id, i) => {
       const P = people[id];
+      const x = ids.length === 2 ? (i ? 1.6 : -1.6) : 0;
       P.root.visible = true;
-      P.root.scale.setScalar(SCALE * 1.25);
-      P.root.position.set(ids.length === 2 ? (i ? 1.4 : -1.4) : 0, y, 1.2);
+      P.root.scale.setScalar(SCALE * 1.4);
+      P.root.position.set(x, y, 1.2);
+      winClouds[i].visible = true;
+      winClouds[i].position.set(x, y - 0.1, 1.4);
       P.root.rotation.y = PI;
       const mode = signature(id, id === 'teddy' ? Math.floor(sc.t / 3) : 0);
       Kit.people.pose(P, G.time * 8, mode, k);
@@ -4504,7 +4512,7 @@
       if (o.level) G.level = o.level;
       if (o.island != null) G.ii = o.island;
       play();
-      if (o.round != null && G.w.n !== o.round) { S.loadRound(G.w, o.round); G.w.events = []; }
+      if (o.round != null && G.w.n !== o.round) { S.loadRound(G.w, o.round); G.w.events = []; big('READY?', stageLine()); }
       if (o.go) { G.w.phase = 'play'; G.w.phaseT = 0; }
       return state();
     },
